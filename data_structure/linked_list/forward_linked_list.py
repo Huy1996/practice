@@ -1,5 +1,5 @@
 class node(object):
-    def __init__(self, data = None):
+    def __init__(self, data=None):
         self.data = data
         self.next = None
 
@@ -8,6 +8,7 @@ class node(object):
 
     def __del__(self):
         del self.data
+
 
 class forward_linked_list(object):
     def __init__(self):
