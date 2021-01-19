@@ -1,4 +1,3 @@
-from data-structure.linked-list.sort import sort
 class node(object):
     def __init__(self, data = None):
         self.data = data
@@ -142,19 +141,76 @@ class forward_linked_list(object):
             self.current = self.current.next
         return None
 
+    def sortedMerge(self, left, right):
+        result = None
+        # Base case
+        if left is None:
+            return right
+        if right is None:
+            return left
+        # pick either left or right and recursive
+        if left.data <= right.data:
+            result = left
+            result.next = self.sortedMerge(left.next, right)
+        else:
+            result = right
+            result.next = self.sortedMerge(left, right.next)
+        return result
 
+    def mergeSort(self, n):
+        # Base case if head is None
+        if n is None or n.next is None:
+            return n
+        # get the middle of the list
+        mid = self.getMiddle(n)
+        mid_next = mid.next
+        # set the next of middle node to None
+        mid.next = None
+        # Apply mergeSort on left list
+        left = self.mergeSort(n)
+        # Apply mergeSort on right list
+        right = self.mergeSort(mid_next)
+        # Merge the left and right lists
+        sorted_list = self.sortedMerge(left, right)
+        return sorted_list
+
+    def sort(self):
+        self.mergeSort(self.__head)
+
+    def getMiddle(self, head):
+        if head is None:
+            return head
+        slow = head
+        fast = head
+        while fast.next is not None and fast.next.next is not None:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+
+    def __str__(self):
+        if self.__head is None:
+            return str("")
+        self.current = self.__head
+        string = str(self.current.data)
+        self.current = self.current.next
+        while self.current is not None:
+            string += ' -> ' + str(self.current.data)
+            self.current = self.current.next
+        return string
 
 
 if __name__ == "__main__":
     fun = forward_linked_list(5)
     fun.insert_back(6)
     fun.insert_front(1)
-    print(fun.__head, " ", fun.__head.next, " ", fun.__head.next.next, fun.__size)
-    fun.insert_at(4,2)
-    print(fun.__head, " ", fun.__head.next, " ", fun.__head.next.next, " ", fun.__head.next.next.next, fun.__size)
-    try:
-        fun.at(10)
-    except Exception:
-        print('invalid call')
-
-    print(fun.__head, " ", fun.__head.next, " ", fun.__head.next.next, fun.__size)
+    fun.sort()
+    print(fun)
+    # print(fun.__head, " ", fun.__head.next, " ", fun.__head.next.next, fun.__size)
+    # fun.insert_at(4,2)
+    # print(fun.__head, " ", fun.__head.next, " ", fun.__head.next.next, " ", fun.__head.next.next.next, fun.__size)
+    # try:
+    #     fun.at(10)
+    # except Exception:
+    #     print('invalid call')
+    #
+    # print(fun.__head, " ", fun.__head.next, " ", fun.__head.next.next, fun.__size)
